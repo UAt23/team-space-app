@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 const Sidebar: React.FC = () => (
-	<div className="w-64 bg-slate-950 h-full">
+	<div className="w-64 text-white p-4 bg-gray-500 h-full">
 		<ul>
 			<li>
 				<Link href="/">Dashboard</Link>
