@@ -8,7 +8,7 @@ const NoteCard = ({
 	return (
 		<Link
 			href={`/notes/${note.id}`}
-			className="block p-4 bg-white shadow rounded"
+			className="block p-4 bg-white transition-all shadow-md rounded hover:shadow-lg"
 		>
 			<h3 className="font-bold text-lg mb-2">{note.title}</h3>
 			<p className="text-gray-600 text-sm">

@@ -1,17 +1,21 @@
+"use client"
+
 import Link from "next/link";
-import { getNotes } from "@/lib/notes";
+import { RootState } from "@/app/store/store";
+import { useSelector } from "react-redux";
+import { usePathname } from "next/navigation";
 
 const NotesSidebar = () => {
-	const notes = getNotes();
-
+	const router = usePathname();
+	const notes = useSelector((state: RootState) => state.notes.notes);
 	return (
-		<div className="w-1/4 h-full bg-gray-100 p-4">
-			<h2 className="text-xl font-bold mb-4">Notes</h2>
+		<div className={`${!router.includes("notes") ? "hidden" : "w-1/4 h-full min-w-32 w-56 bg-gray-100 p-4"}`}>
+			<h2 className="text-xl font-bold  mb-4">Team Notes</h2>
 			{notes.map((note) => (
-				<div key={note.id} className="mb-2">
+				<div key={note.id} className="mb-1">
 					<Link
 						href={`/notes/${note.id}`}
-						className="text-blue-500 hover:underline"
+						className="hover:underline"
 					>
 						{note.title}
 					</Link>
@@ -19,9 +23,9 @@ const NotesSidebar = () => {
 			))}
 			<Link
 				href="/notes/new"
-				className="block text-green-500 mt-4 hover:underline"
+				className="flex justify-center bg-green-500 text-white rounded-md mt-4 p-2 transition-all hover:-translate-y-0.5"
 			>
-				+ New Note
+				New Note
 			</Link>
 		</div>
 	);

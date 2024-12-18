@@ -1,46 +1,51 @@
-"use client"
+"use client";
 
-import { useState } from "react";
+import React, { useState } from "react";
+import SimpleMDE from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
+import { useDispatch } from "react-redux";
+import { addNote } from "@/app/store/slices/notesSlice";
+import { useRouter } from "next/navigation";
 
-interface NoteEditorProps {
-	onSave: (title: string, content: string) => void;
-}
+// type NoteEditorProps = {
+//   onSave: (title: string, content: string) => void;
+// };
 
-const NoteEditor = ({ onSave }: NoteEditorProps) => {
-	const [title, setTitle] = useState("");
-	const [content, setContent] = useState("");
+const NoteEditor = () => {
+  const router = useRouter();
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const dispatch = useDispatch();
 
-	const handleSave = () => {
-		if (title.trim() && content.trim()) {
-			onSave(title, content);
-		} else {
-			alert("Title and content are required!");
-		}
-	};
+  const handleSave = () => {
+    if (title && content) {
+      dispatch(addNote({ title, content }));
+      router.push("/notes")
+      alert("Note saved successfully!");
+    } else {
+      alert("Please fill in both title and content.");
+    }
+  };
 
-	return (
-		<div>
-			<input
-				type="text"
-				placeholder="Title"
-				value={title}
-				onChange={(e) => setTitle(e.target.value)}
-				className="block w-full border p-2 mb-4 rounded"
-			/>
-			<textarea
-				placeholder="Write your note here..."
-				value={content}
-				onChange={(e) => setContent(e.target.value)}
-				className="block w-full border p-2 h-40 rounded"
-			></textarea>
-			<button
-				onClick={handleSave}
-				className="mt-4 px-4 py-2 bg-blue-500 text-white rounded"
-			>
-				Save
-			</button>
-		</div>
-	);
+  return (
+    <div>
+      <input
+        type="text"
+        placeholder="Note Title"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        style={{ width: "100%", padding: "8px", marginBottom: "10px" }}
+      />
+      <SimpleMDE
+        value={content}
+        onChange={(value) => setContent(value)}
+        placeholder="Write your note in Markdown..."
+      />
+      <button onClick={handleSave} style={{ marginTop: "10px" }}>
+        Save Note
+      </button>
+    </div>
+  );
 };
 
 export default NoteEditor;

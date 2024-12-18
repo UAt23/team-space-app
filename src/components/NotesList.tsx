@@ -1,22 +1,34 @@
+"use client";
+
+import { useSelector } from "react-redux";
+import { RootState } from "../app/store/store";
+import Link from "next/link";
 import NoteCard from "./NoteCard";
 
-const NotesList = () => {
-	const notes = [
-		{
-			id: "1",
-			title: "Meeting Notes",
-			content: "Discussed project timelines...",
-		},
-		{ id: "2", title: "Shopping List", content: "Eggs, Milk, Bread..." },
-	];
+// interface NotesListProps {
+//   onNoteClick: (noteId: string) => void;
+// }
 
-	return (
-		<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-			{notes.map((note) => (
-				<NoteCard key={note.id} note={note} />
-			))}
-		</div>
-	);
+const NotesList: React.FC = () => {
+  const notes = useSelector((state: RootState) => state.notes.notes);
+
+  if (!notes || notes.length === 0) {
+    return <p>No notes available. Create your first note!</p>;
+  }
+
+  return (
+    <div>
+      <ul>
+        {notes.map((note) => (
+          <li key={note.id}>
+            <Link href={`/notes/${note.id}`}>
+              <NoteCard note={note}/>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
 };
 
 export default NotesList;

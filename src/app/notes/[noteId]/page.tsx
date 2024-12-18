@@ -1,25 +1,36 @@
-"use client"
+"use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import React, { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useSelector } from "react-redux";
+import ReactMarkdown from "react-markdown";
+import { RootState } from "@/app/store/store";
+import { Note } from "@/types";
 
-const NoteDetail = () => {
-	const router = useRouter();
-	const searchParams = useSearchParams();
-	const noteId = searchParams;
+const NoteDetailPage = () => {
+  const query = usePathname();
+  const [note, setNote] = useState<Note | undefined>();
+  const [loading, setLoading] = useState(true);
 
-	// Placeholder data; replace with a fetch call to get the note details
-	const note = {
-		id: noteId,
-		title: "Meeting Notes",
-		content: "Detailed notes from the meeting...",
-	};
+  const allNotes = useSelector((state: RootState) => state.notes.notes);
 
-	return (
-		<div className="p-6">
-			<h1 className="text-3xl font-bold mb-4">{note.title}</h1>
-			<p className="text-gray-700">{note.content}</p>
-		</div>
-	);
+  useEffect(() => {
+    const foundNote = allNotes.find((n) => n.id === query.split("/")[2]);
+    console.log("foundNote", foundNote);
+
+    setNote(foundNote);
+    setLoading(false);
+  }, [query, allNotes]);
+
+  if (loading) return <div>Loading...</div>;
+  if (note === undefined) return <div>Note not found!</div>;
+
+  return (
+    <div className="p-4">
+      <h1>{note.title}</h1>
+      <ReactMarkdown>{note.content}</ReactMarkdown>
+    </div>
+  );
 };
 
-export default NoteDetail;
+export default NoteDetailPage;
