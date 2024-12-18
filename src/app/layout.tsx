@@ -5,6 +5,7 @@ import Sidebar from "@/components/Sidebar";
 import { Provider } from "react-redux";
 import { store } from "./store/store";
 import NotesSidebar from "@/components/NotesSidebar";
+import NavigationBar from '../components/NavigationBar';
 
 export default function RootLayout({
 	children,
@@ -20,7 +21,10 @@ export default function RootLayout({
 							<Sidebar />
 							<NotesSidebar />
 						</div>
-						{children}
+						<div className="flex flex-col w-full mb-1">
+							<NavigationBar />
+							{children}
+						</div>
 					</Provider>
 				</div>
 			</body>
